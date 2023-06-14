@@ -7,6 +7,7 @@ config.opts = {
 	bgImage = "", -- path to image, must be png
 	roundCorner = true,
 	windowControls = true,
+	windowTitle = nil,
 	lineNumber = true,
 	font = "monospace",
 	lineOffset = 1, -- no idea what this is

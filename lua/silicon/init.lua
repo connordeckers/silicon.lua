@@ -1,6 +1,18 @@
 local init = {}
 
 init.setup = function(opts)
+	local ver = require("silicon.utils")._os_capture("silicon --version")
+	if #ver == 0 then
+		vim.notify(
+			[[
+			silicon.lua requires the installation of silicon (github.com/Aloxaf/silicon).
+			This plugin will not work without this installed on your system.
+		]],
+			vim.log.levels.ERROR
+		)
+		return
+	end
+
 	require("silicon.config").setup(opts)
 end
 
@@ -37,11 +49,11 @@ end
 init.visualise_api = function(opts)
 	local range
 	if opts.visible then
-		range = { vim.fn.getpos('w0')[2], vim.fn.getpos('w$')[2] }
+		range = { vim.fn.getpos("w0")[2], vim.fn.getpos("w$")[2] }
 	elseif opts.cmdline then -- deal with `lua` leaving visual before executing
 		range = { vim.api.nvim_buf_get_mark(0, "<")[1], vim.api.nvim_buf_get_mark(0, ">")[1] }
 	else
-		range = { vim.fn.getpos('v')[2], vim.fn.getpos('.')[2] }
+		range = { vim.fn.getpos("v")[2], vim.fn.getpos(".")[2] }
 	end
 	require("silicon.request").exec(range, opts.show_buf or false, opts.to_clip or false)
 end
@@ -55,7 +67,7 @@ end
 ---]]
 ---@param opts table containing the options
 init.visualise_cmdline = function(opts)
-	opts = vim.tbl_extend('keep', { cmdline = true }, opts)
+	opts = vim.tbl_extend("keep", { cmdline = true }, opts)
 	init.visualise_api(opts)
 end
 
